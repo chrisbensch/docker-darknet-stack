@@ -1,0 +1,146 @@
+---
+version: "2"
+
+networks:
+  darknet:
+    ipam:
+      config:
+        - subnet: 172.16.98.0/24
+
+services:
+  pihole:
+    container_name: pihole
+    image: chrisbensch/docker-pihole
+    networks:
+      darknet:
+        ipv4_address: 172.16.98.53
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "6680:80/tcp"
+      - "6443:443/tcp"
+    mem_limit: 128m
+    environment:
+      TZ: 'UTC'
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./pihole/data/etc-pihole:/etc/pihole
+      - ./pihole/data/etc-dnsmasq.d:/etc/dnsmasq.d
+      - ./pihole/data/data:/data
+      # run `touch ./var-log/pihole.log` first unless you like errors
+      # - './var-log/pihole.log:/var/log/pihole.log'
+    restart: always
+
+  i2p:
+    image: chrisbensch/docker-i2p:latest
+    networks:
+      darknet:
+    container_name: i2p
+    ports:
+      - '7654:7654'
+      - '7656:7656'
+      - '7657:7657'
+      - '4444:4444'
+      - '4445:4445'
+      - '6668:6668'
+      - '6669:6669'
+    mem_limit: 512m
+    restart: always
+
+  tor-proxy:
+    image: chrisbensch/docker-tor-proxy:latest
+    networks:
+      darknet:
+    dns: 172.16.98.53
+    container_name: tor-proxy
+    ports:
+      - '9050:9050'
+      - '9150:9150'
+    mem_limit: 128m
+    restart: always
+
+  lokinet-proxy:
+    container_name: lokinet-proxy
+    image: chrisbensch/docker-lokinet-proxy
+    networks:
+      darknet:
+    privileged: true
+    ports:
+      - '2000:2000'
+    mem_limit: 128m
+    restart: always
+
+  zeronet:
+    container_name: zeronet
+    image: chrisbensch/docker-zeronet:latest
+    networks:
+      darknet:
+    ports:
+      - 26552:26552
+      - 43110:43110
+    mem_limit: 128m
+    environment:
+      - ENABLE_TOR=true
+      #- UI_PASSWORD=password
+    storage_opt:
+      size: '8G'
+    restart: always
+
+  #freenet:
+  #  container_name: freenet
+  #
+  ## Same as if I rebuild/update trijenhout/freenet to newer distro, system stops responding
+  ## to network requests when paired with any other docker network.  This compose works fine
+  ## on its own, but adding to this bigger stack breaks connectivity (http://localhost:8888)
+  #
+  #  image: chrisbensch/docker-freenet:latest
+  #  #network_mode: host
+  #  ports:
+  #    - '8888:8888'
+  #    - '9481:9481'
+  #    - '8675:8675/udp'
+  #    - '8676:8676/udp'
+  #  mem_limit: 2g
+  #  cpus: 0.5
+  #  storage_opt:
+  #    size: '8G'
+  #  volumes:
+  #    - ./freenet/conf/freenet:/conf
+  #    - ./freenet/data/freenet:/data
+  #  environment:
+  #  - darknetport=8675
+  #  - opennetport=8676
+  #  restart: always
+
+  freenet:
+    container_name: freenet
+    image: trijenhout/freenet
+    networks:
+      darknet:
+    ports:
+      - '8888:8888'
+      - '9481:9481'
+      - '8675:8675/udp'
+      - '8676:8676/udp'
+    mem_limit: 2g
+    cpus: 0.5
+    storage_opt:
+      size: '8G'
+    volumes:
+      - ./freenet/conf/freenet:/conf
+      - ./freenet/data/freenet:/data
+    environment:
+    - darknetport=8675
+    - opennetport=8676
+    restart: always
+
+  privoxy:
+      container_name: privoxy
+      image: chrisbensch/docker-privoxy
+      networks:
+        darknet:
+      ports:
+        - '8118:8118'
+      mem_limit: 128m
+      restart: always
