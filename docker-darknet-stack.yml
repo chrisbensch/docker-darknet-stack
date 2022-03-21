@@ -83,8 +83,8 @@ services:
     environment:
       - ENABLE_TOR=true
       #- UI_PASSWORD=password
-    storage_opt:
-      size: '8G'
+    #storage_opt:
+    #  size: '8G'
     restart: always
 
   freenet:
@@ -97,10 +97,10 @@ services:
       - '9481:9481'
       - '8675:8675/udp'
       - '8676:8676/udp'
-    mem_limit: 2g
-    cpus: 0.5
-    storage_opt:
-      size: '10G'
+    #mem_limit: 2g
+    #cpus: 0.5
+    #storage_opt:
+    #  size: '10G'
     volumes:
       - ./freenet/conf/freenet:/conf
       - ./freenet/data/freenet:/data
