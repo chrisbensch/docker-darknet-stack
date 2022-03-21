@@ -87,35 +87,9 @@ services:
       size: '8G'
     restart: always
 
-  #freenet:
-  #  container_name: freenet
-  #
-  ## Same as if I rebuild/update trijenhout/freenet to newer distro, system stops responding
-  ## to network requests when paired with any other docker network.  This compose works fine
-  ## on its own, but adding to this bigger stack breaks connectivity (http://localhost:8888)
-  #
-  #  image: chrisbensch/docker-freenet:latest
-  #  #network_mode: host
-  #  ports:
-  #    - '8888:8888'
-  #    - '9481:9481'
-  #    - '8675:8675/udp'
-  #    - '8676:8676/udp'
-  #  mem_limit: 2g
-  #  cpus: 0.5
-  #  storage_opt:
-  #    size: '8G'
-  #  volumes:
-  #    - ./freenet/conf/freenet:/conf
-  #    - ./freenet/data/freenet:/data
-  #  environment:
-  #  - darknetport=8675
-  #  - opennetport=8676
-  #  restart: always
-
   freenet:
     container_name: freenet
-    image: trijenhout/freenet
+    image: chrisbensch/docker-freenet:latest
     networks:
       darknet:
     ports:
