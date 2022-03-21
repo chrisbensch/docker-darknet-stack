@@ -100,7 +100,7 @@ services:
     mem_limit: 2g
     cpus: 0.5
     storage_opt:
-      size: '8G'
+      size: '10G'
     volumes:
       - ./freenet/conf/freenet:/conf
       - ./freenet/data/freenet:/data
