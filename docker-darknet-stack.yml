@@ -47,7 +47,7 @@ services:
       - '6669:6669'
     mem_limit: 512m
     volumes:
-      - ./i2p/data/torrents:/data/torrents
+      - ./i2p/data/torrents:/var/lib/i2p/i2p-config/i2psnark
     restart: always
 
   tor-proxy:
