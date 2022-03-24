@@ -58,7 +58,7 @@ services:
     container_name: tor-proxy
     ports:
       - '9050:9050'
-      - '9150:9150'
+      - '9051:9051'
     mem_limit: 128m
     restart: always
 
