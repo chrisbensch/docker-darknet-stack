@@ -33,18 +33,19 @@ services:
     restart: always
 
   i2p:
-    image: chrisbensch/docker-i2p:latest
+    image: chrisbensch/docker-i2pd:latest
     networks:
       darknet:
-    container_name: i2p
+    container_name: i2pd
     ports:
-      - '7654:7654'
-      - '7656:7656'
-      - '7657:7657'
-      - '4444:4444'
-      - '4445:4445'
-      - '6668:6668'
-      - '6669:6669'
+      - '4444:4444' # HTTP Proxy
+      - '4445:4445' # SOCKS Proxy
+      - '6668:6668' # IRC Irc2P
+      - '6669:6669' # IRC Ilita
+      - '7070:7070' # Web Console
+      - '7654:7654' # I2CP
+      - '7656:7656' # SAM
+      - '8118:8118' # NTCP
     mem_limit: 512m
     volumes:
       - ./i2p/data/torrents:/var/lib/i2p/i2p-config/i2psnark
