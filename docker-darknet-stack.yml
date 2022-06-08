@@ -45,7 +45,7 @@ services:
       - '7070:7070' # Web Console
       - '7654:7654' # I2CP
       - '7656:7656' # SAM
-      - '8118:8118' # NTCP
+      - '8119:8118' # NTCP
     mem_limit: 512m
     volumes:
       - ./i2p/data/torrents:/var/lib/i2p/i2p-config/i2psnark
