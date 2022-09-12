@@ -68,6 +68,7 @@ services:
     image: chrisbensch/docker-lokinet-proxy
     networks:
       darknet:
+    dns: 172.16.98.53
     privileged: true
     ports:
       - '2000:2000'
@@ -79,6 +80,7 @@ services:
     image: chrisbensch/docker-zeronet:latest
     networks:
       darknet:
+    dns: 172.16.98.53
     ports:
       - '26552:26552'
       - '43110:43110'
@@ -95,6 +97,7 @@ services:
     image: chrisbensch/docker-freenet:latest
     networks:
       darknet:
+    dns: 172.16.98.53
     ports:
       - '8888:8888'
       - '9481:9481'
@@ -117,6 +120,7 @@ services:
       image: chrisbensch/docker-privoxy
       networks:
         darknet:
+      dns: 172.16.98.53
       ports:
         - '8118:8118'
       mem_limit: 128m
@@ -127,6 +131,7 @@ services:
     restart: always
     networks:
       darknet:
+    dns: 172.16.98.53
     ports:
       - '9000:9000'
     volumes:
