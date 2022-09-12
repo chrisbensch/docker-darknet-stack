@@ -15,10 +15,10 @@ services:
       darknet:
         ipv4_address: 172.16.98.53
     ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "6680:80/tcp"
-      - "6443:443/tcp"
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '6680:80/tcp'
+      - '6443:443/tcp'
     mem_limit: 128m
     environment:
       TZ: 'UTC'
@@ -80,8 +80,8 @@ services:
     networks:
       darknet:
     ports:
-      - 26552:26552
-      - 43110:43110
+      - '26552:26552'
+      - '43110:43110'
     mem_limit: 128m
     environment:
       - ENABLE_TOR=true
@@ -108,8 +108,8 @@ services:
       - ./freenet/conf/freenet:/conf
       - ./freenet/data/freenet:/data
     environment:
-    - darknetport=8675
-    - opennetport=8676
+      - darknetport=8675
+      - opennetport=8676
     restart: always
 
   privoxy:
@@ -125,8 +125,10 @@ services:
   portainer:
     image: portainer/portainer-ce
     restart: always
+    networks:
+      darknet:
     ports:
-      - 9000:9000
+      - '9000:9000'
     volumes:
       - //var/run/docker.sock://var/run/docker.sock
       - ./portainer/data:/data
