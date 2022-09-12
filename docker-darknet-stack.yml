@@ -121,3 +121,13 @@ services:
         - '8118:8118'
       mem_limit: 128m
       restart: always
+  
+  portainer:
+    image: portainer/portainer-ce
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - //var/run/docker.sock://var/run/docker.sock
+      - ./portainer/data:/data
+
