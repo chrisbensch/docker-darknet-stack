@@ -1,8 +1,41 @@
 ---
 version: "2"
+
+networks:
+  darknet:
+    ipam:
+      config:
+        - subnet: 172.16.98.0/24
+
 services:
-  i2pd:
+  pihole:
+    container_name: pihole
+    image: chrisbensch/docker-pihole
+    networks:
+      darknet:
+        ipv4_address: 172.16.98.53
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '6680:80/tcp'
+      - '6443:443/tcp'
+    mem_limit: 128m
+    environment:
+      TZ: 'UTC'
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./pihole/data/etc-pihole:/etc/pihole
+      - ./pihole/data/etc-dnsmasq.d:/etc/dnsmasq.d
+      - ./pihole/data/data:/data
+      # run `touch ./var-log/pihole.log` first unless you like errors
+      # - './var-log/pihole.log:/var/log/pihole.log'
+    restart: always
+
+  i2p:
     image: chrisbensch/docker-i2pd:latest
+    networks:
+      darknet:
     container_name: i2pd
     ports:
       - '4444:4444' # HTTP Proxy
@@ -17,25 +50,37 @@ services:
     volumes:
       - ./i2p/data/torrents:/var/lib/i2p/i2p-config/i2psnark
     restart: always
+
   tor-proxy:
     image: chrisbensch/docker-tor-proxy:latest
+    networks:
+      darknet:
+    dns: 172.16.98.53
     container_name: tor-proxy
     ports:
       - '9050:9050'
       - '9051:9051'
     mem_limit: 128m
     restart: always
+
   lokinet-proxy:
     container_name: lokinet-proxy
-    image: chrisbensch/docker-lokinet-proxy:latest
+    image: chrisbensch/docker-lokinet-proxy
+    networks:
+      darknet:
+    dns: 172.16.98.53
     privileged: true
     ports:
       - '2000:2000'
     mem_limit: 128m
     restart: always
+
   zeronet:
     container_name: zeronet
     image: chrisbensch/docker-zeronet:latest
+    networks:
+      darknet:
+    dns: 172.16.98.53
     ports:
       - '26552:26552'
       - '43110:43110'
@@ -46,9 +91,13 @@ services:
     #storage_opt:
     #  size: '8G'
     restart: always
+
   freenet:
     container_name: freenet
     image: chrisbensch/docker-freenet:latest
+    networks:
+      darknet:
+    dns: 172.16.98.53
     ports:
       - '8888:8888'
       - '9481:9481'
@@ -65,12 +114,27 @@ services:
       - darknetport=8675
       - opennetport=8676
     restart: always
+
+  privoxy:
+      container_name: privoxy
+      image: chrisbensch/docker-privoxy
+      networks:
+        darknet:
+      dns: 172.16.98.53
+      ports:
+        - '8118:8118'
+      mem_limit: 128m
+      restart: always
+  
   portainer:
     image: portainer/portainer-ce
-    container_name: portainer
     restart: always
+    networks:
+      darknet:
+    dns: 172.16.98.53
     ports:
       - '9000:9000'
     volumes:
       - //var/run/docker.sock://var/run/docker.sock
       - ./portainer/data:/data
+
