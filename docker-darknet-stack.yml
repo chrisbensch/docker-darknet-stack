@@ -4,6 +4,8 @@ services:
   i2pd:
     image: chrisbensch/docker-i2pd:latest
     container_name: i2pd
+    networks:
+      - darknet
     ports:
       - '4444:4444' # HTTP Proxy
       - '4445:4445' # SOCKS Proxy
@@ -13,6 +15,8 @@ services:
       - '7654:7654' # I2CP
       - '7656:7656' # SAM
       - '8119:8118' # NTCP
+      - '28656:28656' # SSU Custom Port
+      - '28657:28657' # SSU2 Custom Port
     mem_limit: 512m
     volumes:
       - ./i2p/data/torrents:/var/lib/i2p/i2p-config/i2psnark
@@ -25,52 +29,6 @@ services:
       - '9051:9051'
     mem_limit: 128m
     restart: always
-  lokinet-proxy:
-    container_name: lokinet-proxy
-    image: chrisbensch/docker-lokinet-proxy:latest
-    privileged: true
-    ports:
-      - '2000:2000'
-    mem_limit: 128m
-    restart: always
-  zeronet:
-    container_name: zeronet
-    image: chrisbensch/docker-zeronet:latest
-    ports:
-      - '26552:26552'
-      - '43110:43110'
-    mem_limit: 128m
-    environment:
-      - ENABLE_TOR=true
-      #- UI_PASSWORD=password
-    #storage_opt:
-    #  size: '8G'
-    restart: always
-  freenet:
-    container_name: freenet
-    image: chrisbensch/docker-freenet:latest
-    ports:
-      - '8888:8888'
-      - '9481:9481'
-      - '8675:8675/udp'
-      - '8676:8676/udp'
-    #mem_limit: 2g
-    #cpus: 0.5
-    #storage_opt:
-    #  size: '10G'
-    volumes:
-      - ./freenet/conf/freenet:/conf
-      - ./freenet/data/freenet:/data
-    environment:
-      - darknetport=8675
-      - opennetport=8676
-    restart: always
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: always
-    ports:
-      - '9000:9000'
-    volumes:
-      - //var/run/docker.sock://var/run/docker.sock
-      - ./portainer/data:/data
+
+networks:
+  darknet:
