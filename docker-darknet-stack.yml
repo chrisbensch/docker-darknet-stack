@@ -1,11 +1,11 @@
 ---
 version: "2"
+
 services:
   i2pd:
     image: chrisbensch/docker-i2pd:latest
     container_name: i2pd
-    networks:
-      - darknet
+    depends_on:
     ports:
       - '4444:4444' # HTTP Proxy
       - '4445:4445' # SOCKS Proxy
@@ -19,16 +19,14 @@ services:
       - '28657:28657' # SSU2 Custom Port
     mem_limit: 512m
     volumes:
-      - ./i2p/data/torrents:/var/lib/i2p/i2p-config/i2psnark
-    restart: always
+      - ./appdata/etc:/etc/i2pd
+      - ./appdata/var:/var/lib/i2pd
+    restart: unless-stopped
   tor-proxy:
     image: chrisbensch/docker-tor-proxy:latest
     container_name: tor-proxy
     ports:
       - '9050:9050'
       - '9051:9051'
-    mem_limit: 128m
-    restart: always
-
-networks:
-  darknet:
+    mem_limit: 512m
+    restart: unless-stopped
