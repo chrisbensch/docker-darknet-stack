@@ -2,8 +2,8 @@
   "mode": "pattern",
   "sync": false,
   "autoBackup": true,
-  "showPatternProxy": true,
   "passthrough": "",
+  "theme": "",
   "container": {
     "incognito": "",
     "container-1": "",
@@ -27,44 +27,19 @@
       "password": "",
       "cc": "",
       "city": "",
-      "color": "#231ce8",
+      "color": "#9141ac",
       "pac": "",
       "pacString": "",
       "proxyDNS": false,
       "include": [
         {
           "type": "regex",
-          "title": "eepsites",
-          "pattern": "^[^:]+://\\.i2p(/.*)?/",
-          "active": false
-        },
-        {
-          "type": "wildcard",
           "title": "I2P",
-          "pattern": "://*.i2p",
+          "pattern": ".*\\.i2p(/.*)?$",
           "active": true
         }
       ],
-      "exclude": [
-        {
-          "type": "regex",
-          "title": "local hostnames (usually no dots in the name). Pattern exists because 'Do not use this proxy for localhost and intranet/private IP addresses' is checked.",
-          "pattern": "^[^:]+://(?:[^:@/]+(?::[^@/]+)?@)?(?:localhost|127\\.\\d+\\.\\d+\\.\\d+)(?::\\d+)?(?:/.*)?/",
-          "active": false
-        },
-        {
-          "type": "regex",
-          "title": "local subnets (IANA reserved address space). Pattern exists because 'Do not use this proxy for localhost and intranet/private IP addresses' is checked.",
-          "pattern": "^[^:]+://(?:[^:@/]+(?::[^@/]+)?@)?(?:192\\.168\\.\\d+\\.\\d+|10\\.\\d+\\.\\d+\\.\\d+|172\\.(?:1[6789]|2[0-9]|3[01])\\.\\d+\\.\\d+)(?::\\d+)?(?:/.*)?/",
-          "active": false
-        },
-        {
-          "type": "regex",
-          "title": "localhost - matches the local host optionally prefixed by a user:password authentication string and optionally suffixed by a port number. The entire local subnet (127.0.0.0/8) matches. Pattern exists because 'Do not use this proxy for localhost and intranet/private IP addresses' is checked.",
-          "pattern": "^[^:]+://(?:[^:@/]+(?::[^@/]+)?@)?[\\w-]+(?::\\d+)?(?:/.*)?/",
-          "active": false
-        }
-      ]
+      "exclude": []
     },
     {
       "active": true,
@@ -83,43 +58,36 @@
       "include": [
         {
           "type": "regex",
-          "title": "hidden services",
-          "pattern": "^[^:]+://(http(s)?|ftp|irc)\\://[\\w\\-\\.]+\\.onion(/.*)?/",
-          "active": false
-        },
-        {
-          "type": "wildcard",
-          "title": "all sites",
-          "pattern": "*://*/",
-          "active": false
-        },
-        {
-          "type": "wildcard",
           "title": "Tor",
-          "pattern": "://*.onion",
+          "pattern": ".*\\.onion(/.*)?$",
           "active": true
         }
       ],
-      "exclude": [
+      "exclude": []
+    },
+    {
+      "active": true,
+      "title": "DIRECT",
+      "type": "direct",
+      "hostname": "DIRECT",
+      "port": "1111",
+      "username": "",
+      "password": "",
+      "cc": "",
+      "city": "",
+      "color": "#ffb6c1",
+      "pac": "",
+      "pacString": "",
+      "proxyDNS": true,
+      "include": [
         {
           "type": "regex",
-          "title": "localhost - Matches the local host optionally prefixed by a user:password authentication string and optionally suffixed by a port number. Note that the entire local subnet (127.0.0.0/8) matches. Pattern exists because \"Do not use this proxy for internal IP addresses\" is checked",
-          "pattern": "^[^:]+://https?://(?:[^:@/]+(?::[^@/]+)?@)?(?:localhost|127\\.\\d+\\.\\d+\\.\\d+)(?::\\d+)?.*/",
-          "active": false
-        },
-        {
-          "type": "regex",
-          "title": "local subnets (IANA reserved address space). Pattern exists because \"Do not use this proxy for internal IP addresses\" is checked",
-          "pattern": "^[^:]+://https?://(?:[^:@/]+(?::[^@/]+)?@)?(?:192\\.168\\.\\d+\\.\\d+|10\\.\\d+\\.\\d+\\.\\d+|172\\.(?:1[6789]|2[0-9]|3[01])\\.\\d+\\.\\d+)(?::\\d+)?.*/",
-          "active": false
-        },
-        {
-          "type": "regex",
-          "title": "local hostnames (usually no dots in the name). Pattern exists because \"Do not use this proxy for internal IP addresses\" is checked",
-          "pattern": "^[^:]+://https?://(?:[^:@/]+(?::[^@/]+)?@)?[\\w-]+(?::\\d+)?/.*/",
-          "active": false
+          "title": "127.*.*.*",
+          "pattern": "^(http|https):\\/\\/127\\.0\\.0\\.1(:\\d+)?\\/?",
+          "active": true
         }
-      ]
+      ],
+      "exclude": []
     },
     {
       "active": true,

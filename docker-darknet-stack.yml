@@ -5,7 +5,6 @@ services:
   i2pd:
     image: chrisbensch/docker-i2pd:latest
     container_name: i2pd
-    depends_on:
     ports:
       - '4444:4444' # HTTP Proxy
       - '4445:4445' # SOCKS Proxy
